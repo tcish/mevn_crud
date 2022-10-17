@@ -1,10 +1,10 @@
 import { createApp } from "vue";
-import Antd from "ant-design-vue";
+import ViewUIPlus from 'view-ui-plus'
 import App from "./App.vue";
-import "ant-design-vue/dist/antd.css";
 import router from "./router";
+import 'view-ui-plus/dist/styles/viewuiplus.css'
 
 const app = createApp(App);
-app.use(router);
-app.use(Antd);
+app.use(router)
+app.use(ViewUIPlus);
 app.mount("#app");
