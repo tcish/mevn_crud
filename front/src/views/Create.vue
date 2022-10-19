@@ -27,7 +27,7 @@
   </div>
 </template>
 <script>
-const axios = require('axios').default;
+const axios = require("axios").default;
 
 export default {
   data() {
@@ -85,11 +85,15 @@ export default {
             .post("http://127.0.0.1:3000/create", data)
             .then((response) => {
               this.$Message.success("Inserted Successfully!");
-              this.handleReset(formRefName)
+              this.handleReset(formRefName);
               this.$router.push("/");
             })
-            .catch(function (error) {
-              console.log(error);
+            .catch((error) => {
+              if (error.response.data.message.errors.email) {
+                this.$Message.error(
+                  error.response.data.message.errors.email.message
+                );
+              }
             });
         } else {
           this.$Message.error("Please check all the inputs!");

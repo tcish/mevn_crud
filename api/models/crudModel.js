@@ -10,7 +10,6 @@ const crudSchema = new mongoose.Schema({
   email: {
     type: String,
     required: [true, "Please provide your email"],
-    unique: true,
     lowercase: true,
     validate: [validator.isEmail, "Please provide a valid email"],
   },
@@ -25,6 +24,11 @@ const crudSchema = new mongoose.Schema({
     required: [true, "Please provide your skill"],
   },
 });
+
+crudSchema.path("email").validate(async function (email) {
+  const hasMail = await mongoose.models.Crud.countDocuments({ email });
+  return !hasMail;
+}, "Email already taken!");
 
 const Crud = mongoose.model("Crud", crudSchema);
 
