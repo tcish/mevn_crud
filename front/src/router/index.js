@@ -14,6 +14,13 @@ const routes = [
       return import("../views/Create.vue");
     },
   },
+  {
+    path: "/edit/:id",
+    name: "edit",
+    component: function () {
+      return import("../views/Edit.vue");
+    },
+  },
 ];
 
 const router = createRouter({

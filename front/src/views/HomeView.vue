@@ -2,13 +2,11 @@
   <div class="main">
     <Table stripe border height="auto" :columns="columns" :data="data">
       <template #action="{ row }">
-        <Button
-          type="primary"
-          size="small"
-          style="margin-right: 5px"
-          @click="show(row._id)"
-          >Edit</Button
-        >
+        <router-link :to="'/edit/' + row._id">
+          <Button type="primary" size="small" style="margin-right: 5px"
+            >Edit</Button
+          >
+        </router-link>
         <Button type="error" size="small" @click="remove(row._id)"
           >Delete</Button
         >

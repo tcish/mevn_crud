@@ -31,6 +31,18 @@ exports.read = async (req, res) => {
   }
 };
 
+exports.readOne = async (req, res) => {
+  try {
+    const data = await Crud.findById(req.params.id).exec();
+    res.status(200).json({ status: "success", data: { data } });
+  } catch (err) {
+    res.status(404).json({
+      status: "fail",
+      message: err,
+    });
+  }
+};
+
 exports.update = async (req, res) => {
   try {
     const data = await Crud.findByIdAndUpdate(req.params.id, req.body, {
