@@ -73,7 +73,6 @@ export default {
       await axios
         .delete(`http://127.0.0.1:3000/delete-data/${id}`)
         .then((response) => {
-          console.log(response);
           if (response.data.status == "success") {
             this.$Message.success("Deleted Successfully");
             this.getData();

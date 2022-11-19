@@ -21,6 +21,13 @@ const routes = [
       return import("../views/Edit.vue");
     },
   },
+  {
+    path: "/signup",
+    name: "signup",
+    component: function () {
+      return import("../views/Signup.vue");
+    },
+  },
 ];
 
 const router = createRouter({
