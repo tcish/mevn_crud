@@ -82,7 +82,9 @@ export default {
         if (valid) {
           const data = JSON.parse(JSON.stringify(this.form));
           axios
-            .post("http://127.0.0.1:3000/create", data)
+            .post("http://127.0.0.1:3000/create", data, {
+              withCredentials: true,
+            })
             .then((response) => {
               this.$Message.success("Inserted Successfully!");
               this.handleReset(formRefName);

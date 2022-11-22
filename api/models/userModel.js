@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
-const bcrypt = require("bcryptjs")
+const bcrypt = require("bcryptjs");
 
 const userSchema = new mongoose.Schema({
   phone: {
@@ -41,6 +41,14 @@ userSchema.path("phone").validate(async function (phone) {
   const hasPhone = await mongoose.models.User.countDocuments({ phone });
   return !hasPhone;
 }, "Phone number already exist!");
+
+// ? this is to match user given password
+userSchema.methods.correctPassword = async function (
+  givenPassword,
+  savedPassword
+) {
+  return await bcrypt.compare(givenPassword, savedPassword);
+};
 
 const User = mongoose.model("User", userSchema);
 

@@ -60,7 +60,9 @@ export default {
   methods: {
     async getData() {
       await axios
-        .get("http://127.0.0.1:3000/read")
+        .get("http://127.0.0.1:3000/read", {
+          withCredentials: true,
+        })
         .then((response) => {
           this.data = response.data.data.datas;
         })

@@ -80,7 +80,9 @@ export default {
     getOneData() {
       const id = this.$route.params.id;
       axios
-        .get(`http://127.0.0.1:3000/read-one/${id}`)
+        .get(`http://127.0.0.1:3000/read-one/${id}`, {
+          withCredentials: true,
+        })
         .then((response) => {
           this.form = response.data.data.data;
         })
@@ -95,7 +97,9 @@ export default {
           // const data = JSON.parse(JSON.stringify(this.form));
           const id = this.$route.params.id;
           axios
-            .post(`http://127.0.0.1:3000/update-data/${id}`, this.form)
+            .post(`http://127.0.0.1:3000/update-data/${id}`, this.form, {
+              withCredentials: true,
+            })
             .then((response) => {
               this.$Message.success("Updated Successfully!");
               this.handleReset(form);

@@ -109,7 +109,6 @@ export default {
               credentials: "include",
             })
             .then((response) => {
-              console.log(response);
               if (response.data.status == "success") {
                 this.$Message.success("User Registered");
                 this.handleReset(formRef);
