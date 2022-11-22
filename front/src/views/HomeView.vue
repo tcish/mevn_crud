@@ -1,5 +1,7 @@
 <template>
   <div class="main">
+    <HeaderLink />
+
     <Table stripe border height="auto" :columns="columns" :data="data">
       <template #action="{ row }">
         <router-link :to="'/edit/' + row._id">
@@ -16,8 +18,13 @@
 </template>
 <script>
 const axios = require("axios").default;
+import HeaderLink from "./component/HeaderLink.vue";
 
 export default {
+  components: {
+    HeaderLink,
+  },
+
   data() {
     return {
       columns: [

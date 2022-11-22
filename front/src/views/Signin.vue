@@ -1,39 +1,48 @@
 <template>
-  <Form
-    ref="signinForm"
-    :rules="rules"
-    :model="signin"
-    style="width: 300px; margin: 0 auto"
-  >
-    <FormItem prop="phone">
-      <Input type="text" v-model="signin.phone" placeholder="Enter phone">
-        <template #prepend>
-          <Icon type="ios-call-outline" />
-        </template>
-      </Input>
-    </FormItem>
+<div>
+    <HeaderLink />
 
-    <FormItem prop="password">
-      <Input
-        type="password"
-        v-model="signin.password"
-        placeholder="Enter password"
-      >
-        <template #prepend>
-          <Icon type="ios-lock-outline" />
-        </template>
-      </Input>
-    </FormItem>
-
-    <FormItem>
-      <Button type="primary" @click="handleSubmit('signinForm')">Signin</Button>
-    </FormItem>
-  </Form>
+    <Form
+      ref="signinForm"
+      :rules="rules"
+      :model="signin"
+      style="width: 300px; margin: 0 auto"
+    >
+      <FormItem prop="phone">
+        <Input type="text" v-model="signin.phone" placeholder="Enter phone">
+          <template #prepend>
+            <Icon type="ios-call-outline" />
+          </template>
+        </Input>
+      </FormItem>
+  
+      <FormItem prop="password">
+        <Input
+          type="password"
+          v-model="signin.password"
+          placeholder="Enter password"
+        >
+          <template #prepend>
+            <Icon type="ios-lock-outline" />
+          </template>
+        </Input>
+      </FormItem>
+  
+      <FormItem>
+        <Button type="primary" @click="handleSubmit('signinForm')">Signin</Button>
+      </FormItem>
+    </Form>
+</div>
 </template>
 <script>
 const axios = require("axios").default;
+import HeaderLink from "./component/HeaderLink.vue";
 
 export default {
+  components: {
+    HeaderLink,
+  },
+
   data() {
     return {
       signin: {

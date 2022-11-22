@@ -1,35 +1,43 @@
 <template>
-  <div style="width: 400px; margin: 0 auto">
-    <Form ref="form" :model="form" :rules="ruleValidate">
-      <FormItem label="Name" prop="name">
-        <Input v-model="form.name" placeholder="Enter your name"></Input>
-      </FormItem>
+  <div>
+    <HeaderLink />
 
-      <FormItem label="E-mail" prop="email">
-        <Input v-model="form.email" placeholder="Enter your e-mail"></Input>
-      </FormItem>
-
-      <FormItem label="Address" prop="address">
-        <Input v-model="form.address" placeholder="Enter your address"></Input>
-      </FormItem>
-
-      <FormItem label="Skills" prop="skill">
-        <Input v-model="form.skill" placeholder="Enter your skill"></Input>
-      </FormItem>
-
-      <FormItem>
-        <Button type="primary" @click="handleSubmit('form')">Submit</Button>
-        <Button @click="handleReset('form')" style="margin-left: 8px"
-          >Reset</Button
-        >
-      </FormItem>
-    </Form>
+    <div style="width: 400px; margin: 0 auto">
+      <Form ref="form" :model="form" :rules="ruleValidate">
+        <FormItem label="Name" prop="name">
+          <Input v-model="form.name" placeholder="Enter your name"></Input>
+        </FormItem>
+        <FormItem label="E-mail" prop="email">
+          <Input v-model="form.email" placeholder="Enter your e-mail"></Input>
+        </FormItem>
+        <FormItem label="Address" prop="address">
+          <Input
+            v-model="form.address"
+            placeholder="Enter your address"
+          ></Input>
+        </FormItem>
+        <FormItem label="Skills" prop="skill">
+          <Input v-model="form.skill" placeholder="Enter your skill"></Input>
+        </FormItem>
+        <FormItem>
+          <Button type="primary" @click="handleSubmit('form')">Submit</Button>
+          <Button @click="handleReset('form')" style="margin-left: 8px"
+            >Reset</Button
+          >
+        </FormItem>
+      </Form>
+    </div>
   </div>
 </template>
 <script>
 const axios = require("axios").default;
+import HeaderLink from "./component/HeaderLink.vue";
 
 export default {
+  components: {
+    HeaderLink,
+  },
+
   data() {
     return {
       form: {

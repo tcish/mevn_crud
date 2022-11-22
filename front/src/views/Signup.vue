@@ -1,49 +1,55 @@
 <template>
-  <div style="width: 450px; margin: 0 auto">
-    <Form
-      ref="formValidate"
-      :model="formValidate"
-      :rules="ruleValidate"
-      :label-width="150"
-    >
-      <FormItem label="Phone No." prop="phone">
-        <Input
-          v-model="formValidate.phone"
-          placeholder="Enter your phone no"
-        ></Input>
-      </FormItem>
+  <div>
+    <HeaderLink />
 
-      <FormItem label="Password" prop="passwd">
-        <Input
-          type="password"
-          v-model="formValidate.passwd"
-          placeholder="Enter password"
-        ></Input>
-      </FormItem>
-
-      <FormItem label="Confirm Password" prop="passwdCheck">
-        <Input
-          type="password"
-          v-model="formValidate.passwdCheck"
-          placeholder="Confirm password"
-        ></Input>
-      </FormItem>
-
-      <FormItem>
-        <Button type="primary" @click="handleSubmit('formValidate')"
-          >Submit</Button
-        >
-        <Button @click="handleReset('formValidate')" style="margin-left: 8px"
-          >Reset</Button
-        >
-      </FormItem>
-    </Form>
+    <div style="width: 450px; margin: 0 auto">
+      <Form
+        ref="formValidate"
+        :model="formValidate"
+        :rules="ruleValidate"
+        :label-width="150"
+      >
+        <FormItem label="Phone No." prop="phone">
+          <Input
+            v-model="formValidate.phone"
+            placeholder="Enter your phone no"
+          ></Input>
+        </FormItem>
+        <FormItem label="Password" prop="passwd">
+          <Input
+            type="password"
+            v-model="formValidate.passwd"
+            placeholder="Enter password"
+          ></Input>
+        </FormItem>
+        <FormItem label="Confirm Password" prop="passwdCheck">
+          <Input
+            type="password"
+            v-model="formValidate.passwdCheck"
+            placeholder="Confirm password"
+          ></Input>
+        </FormItem>
+        <FormItem>
+          <Button type="primary" @click="handleSubmit('formValidate')"
+            >Submit</Button
+          >
+          <Button @click="handleReset('formValidate')" style="margin-left: 8px"
+            >Reset</Button
+          >
+        </FormItem>
+      </Form>
+    </div>
   </div>
 </template>
 <script>
 const axios = require("axios").default;
+import HeaderLink from "./component/HeaderLink.vue";
 
 export default {
+  components: {
+    HeaderLink,
+  },
+
   data() {
     const validatePhone = (rule, value, callback) => {
       const phRegex = /^(?:\+?88)?01[13-9]\d{8}$/;
