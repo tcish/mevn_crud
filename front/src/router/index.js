@@ -1,5 +1,6 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
+import Cookies from 'js-cookie'
 
 const routes = [
   {
@@ -60,14 +61,14 @@ const router = createRouter({
 router.beforeEach(async (to, form, next) => {
   to.matched.some((data) => {
     if (data.meta.isAuth == true) {
-      if (document.cookie) {
+      if (Cookies.get("jwt")) {
         return next();
       }
       return next("/");
     }
 
     if (data.meta.isAuth == false) {
-      if (document.cookie) {
+      if (Cookies.get("jwt")) {
         return next("/home");
       }
     }
