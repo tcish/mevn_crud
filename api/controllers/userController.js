@@ -67,3 +67,9 @@ exports.signin = async (req, res) => {
 
   res.status(200).json({ status: "success", token });
 };
+
+exports.logout = async (req, res) => {
+  res.clearCookie("jwt");
+
+  res.status(200).json({ status: "success" });
+};

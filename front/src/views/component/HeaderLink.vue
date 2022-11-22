@@ -3,7 +3,7 @@
     <span v-if="loggedIn">
       <router-link to="/home">Home</router-link> |
       <router-link to="/create">Create</router-link> |
-      <router-link to="/logout">Logout</router-link>
+      <a href="" @click.prevent="logout">Logout</a>
     </span>
     <span v-else-if="!loggedIn">
       <router-link to="/">Login</router-link> |
@@ -13,6 +13,7 @@
 </template>
 
 <script>
+const axios = require("axios").default;
 import Cookies from "js-cookie";
 
 export default {
@@ -22,8 +23,25 @@ export default {
     };
   },
 
+  methods: {
+    logout() {
+      axios
+        .get(`http://127.0.0.1:3000/logout`, {
+          withCredentials: true,
+          credentials: "include",
+        })
+        .then((response) => {
+          if (response.data.status == "success") {
+            this.$router.push("/");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+  },
+
   mounted() {
-    console.log(1);
     Cookies.get("jwt") ? (this.loggedIn = true) : (this.loggedIn = false);
   },
 };
