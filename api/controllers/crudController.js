@@ -2,6 +2,13 @@ const Crud = require("../models/crudModel.js");
 
 exports.create = async (req, res) => {
   try {
+    const hasMail = await Crud.findOne({ email: req.body.email });
+    if (hasMail) {
+      return res
+        .status(401)
+        .json({ status: "fail", message: "Email already exist!" });
+    }
+
     const data = await Crud.create({
       name: req.body.name,
       email: req.body.email,
@@ -45,6 +52,13 @@ exports.readOne = async (req, res) => {
 
 exports.update = async (req, res) => {
   try {
+    const hasMail = await Crud.findOne({ email: req.body.email });
+    if (hasMail && hasMail._id.toString() != req.params.id) {
+      return res
+        .status(401)
+        .json({ status: "fail", message: "Email already exist!" });
+    }
+
     const data = await Crud.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
       runValidators: true,

@@ -80,7 +80,9 @@ export default {
 
     async remove(id) {
       await axios
-        .delete(`http://127.0.0.1:3000/delete-data/${id}`)
+        .delete(`http://127.0.0.1:3000/delete-data/${id}`, {
+          withCredentials: true,
+        })
         .then((response) => {
           if (response.data.status == "success") {
             this.$Message.success("Deleted Successfully");

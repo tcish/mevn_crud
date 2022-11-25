@@ -29,7 +29,7 @@
       </FormItem>
   
       <FormItem>
-        <Button type="primary" @click="handleSubmit('signinForm')">Signin</Button>
+        <Button type="primary" @click="handleSubmit('signinForm')">Login</Button>
       </FormItem>
     </Form>
 </div>

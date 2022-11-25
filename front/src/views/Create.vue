@@ -11,7 +11,10 @@
           <Input v-model="form.email" placeholder="Enter your e-mail"></Input>
         </FormItem>
         <FormItem label="Address" prop="address">
-          <Input v-model="form.address" placeholder="Enter your address"></Input>
+          <Input
+            v-model="form.address"
+            placeholder="Enter your address"
+          ></Input>
         </FormItem>
         <FormItem label="Skills" prop="skill">
           <Input v-model="form.skill" placeholder="Enter your skill"></Input>
@@ -96,10 +99,8 @@ export default {
               this.$router.push("/");
             })
             .catch((error) => {
-              if (error.response.data.message.errors.email) {
-                this.$Message.error(
-                  error.response.data.message.errors.email.message
-                );
+              if (error.response.data.message) {
+                this.$Message.error(error.response.data.message);
               }
             });
         } else {

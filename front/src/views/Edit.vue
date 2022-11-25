@@ -114,10 +114,8 @@ export default {
               this.$router.push("/");
             })
             .catch((error) => {
-              if (error.response.data.message.errors.email) {
-                this.$Message.error(
-                  error.response.data.message.errors.email.message
-                );
+              if (error.response.data.message) {
+                this.$Message.error(error.response.data.message);
               }
             });
         } else {
