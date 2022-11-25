@@ -75,6 +75,9 @@ export default {
         })
         .catch((error) => {
           console.log(error);
+          if (error.response.data.status == "fail") {
+            this.$Message.error(error.response.data.message);
+          }
         });
     },
 

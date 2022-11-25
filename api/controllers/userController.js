@@ -4,15 +4,19 @@ const jwt = require("jsonwebtoken");
 exports.signup = async (req, res) => {
   try {
     if (!req.user) {
+      const hasPhone = await User.findOne({ phone: req.body.phone });
+      if (hasPhone) {
+        return res
+          .status(401)
+          .json({ status: "fail", message: "Phone number already exist!" });
+      }
+
       const newUser = await User.create({
         phone: req.body.phone,
         passwd: req.body.passwd,
         passwdCheck: req.body.passwdCheck,
       });
 
-      // let token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
-      //   expiresIn: process.env.JWT_EXPIRED_IN,
-      // });
       let token = jwt.sign({ id: newUser._id }, "well-something", {
         expiresIn: "90d",
       });
@@ -69,6 +73,7 @@ exports.signin = async (req, res) => {
 };
 
 exports.logout = async (req, res) => {
+  req.user = null;
   res.clearCookie("jwt");
 
   res.status(200).json({ status: "success" });

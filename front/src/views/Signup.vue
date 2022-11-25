@@ -118,13 +118,14 @@ export default {
               if (response.data.status == "success") {
                 this.$Message.success("User Registered");
                 this.handleReset(formRef);
+                setTimeout(() => {
+                  this.$router.push({ path: "/home" });
+                }, 3000);
               }
             })
             .catch((error) => {
-              if (error.response.data.message.errors.phone) {
-                this.$Message.error(
-                  error.response.data.message.errors.phone.message
-                );
+              if (error.response.data.message) {
+                this.$Message.error(error.response.data.message);
               }
             });
         } else {

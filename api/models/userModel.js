@@ -36,12 +36,6 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
-// ? this is checking duplicate phone entry
-userSchema.path("phone").validate(async function (phone) {
-  const hasPhone = await mongoose.models.User.countDocuments({ phone });
-  return !hasPhone;
-}, "Phone number already exist!");
-
 // ? this is to match user given password
 userSchema.methods.correctPassword = async function (
   givenPassword,
