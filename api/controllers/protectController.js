@@ -20,6 +20,7 @@ exports.notLoggedIn = async (req, res, next) => {
   // ^ 3) check if user still exits
   const loggedInUser = await User.findById(decoded.id);
   if (!loggedInUser) {
+    req.user = null;
     res.clearCookie("jwt");
     return res.status(401).json({
       status: "fail",

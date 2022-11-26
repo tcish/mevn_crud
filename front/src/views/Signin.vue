@@ -1,5 +1,5 @@
 <template>
-<div>
+  <div>
     <HeaderLink />
 
     <Form
@@ -15,7 +15,7 @@
           </template>
         </Input>
       </FormItem>
-  
+
       <FormItem prop="password">
         <Input
           type="password"
@@ -27,12 +27,21 @@
           </template>
         </Input>
       </FormItem>
-  
+      <div class="auto-login">
+        <Checkbox
+          v-model="signin.rememberMe"
+          value="true"
+          v-if="signin.rememberMe ? 'selected' : 'unselected'"
+          >Remember me</Checkbox
+        >
+      </div>
       <FormItem>
-        <Button type="primary" @click="handleSubmit('signinForm')">Login</Button>
+        <Button type="primary" @click="handleSubmit('signinForm')"
+          >Login</Button
+        >
       </FormItem>
     </Form>
-</div>
+  </div>
 </template>
 <script>
 const axios = require("axios").default;
@@ -48,6 +57,7 @@ export default {
       signin: {
         phone: "",
         password: "",
+        rememberMe: null,
       },
 
       rules: {
@@ -81,6 +91,10 @@ export default {
     };
   },
 
+  created() {
+    this.chkRemember();
+  },
+
   methods: {
     handleSubmit(name) {
       this.$refs[name].validate((valid) => {
@@ -111,6 +125,34 @@ export default {
     handleReset(formRef) {
       this.$refs[formRef].resetFields();
     },
+
+    chkRemember() {
+      axios
+        .get(`http://127.0.0.1:3000/chk-remember`, {
+          withCredentials: true,
+        })
+        .then((response) => {
+          console.log(response.data.data);
+          if (response && response.data.status == "success") {
+            this.signin.phone = response.data.data.phone;
+            this.signin.password = response.data.data.passwd;
+            this.signin.rememberMe = true;
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
   },
 };
 </script>
+
+<style scoped>
+.auto-login {
+  margin-bottom: 24px;
+  text-align: left;
+}
+.auto-login a {
+  float: right;
+}
+</style>

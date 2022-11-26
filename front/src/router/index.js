@@ -1,6 +1,6 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
-import Cookies from 'js-cookie'
+import Cookies from "js-cookie";
 
 const routes = [
   {

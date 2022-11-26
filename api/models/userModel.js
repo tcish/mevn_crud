@@ -25,6 +25,8 @@ const userSchema = new mongoose.Schema({
       message: "Password mismatch!",
     },
   },
+
+  rememberMe: String,
 });
 
 // ? this is for hashing password before inserting data after checking the validation

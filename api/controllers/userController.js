@@ -43,7 +43,7 @@ exports.signup = async (req, res) => {
 };
 
 exports.signin = async (req, res) => {
-  const { phone, password } = req.body;
+  const { phone, password, rememberMe } = req.body;
 
   // ! 1) check if email and password given
   if (!phone || !password) {
@@ -69,6 +69,17 @@ exports.signin = async (req, res) => {
     expiresIn: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
   });
 
+  if (rememberMe) {
+    let randVal = (Math.random() + 1).toString(36).substring(2);
+    res.cookie("remember", randVal, {
+      expiresIn: new Date(Date.now() + 604800000),
+    });
+    await User.findByIdAndUpdate(user._id.toString(), { rememberMe: randVal });
+  } else {
+    await User.findByIdAndUpdate(user._id.toString(), { rememberMe: null });
+    res.clearCookie("remember");
+  }
+
   res.status(200).json({ status: "success", token });
 };
 
@@ -77,4 +88,18 @@ exports.logout = async (req, res) => {
   res.clearCookie("jwt");
 
   res.status(200).json({ status: "success" });
+};
+
+exports.CheckRemember = async (req, res, next) => {
+  const isRemember = req.cookies.remember;
+  if (isRemember) {
+    const user = await User.findOne({ rememberMe: isRemember });
+    const plainPass = await user.correctPassword("12345678", user.passwd);
+    // console.log(plainPass);
+    if (user.rememberMe) {
+      res.status(200).json({ status: "success", data: user });
+    }
+  }
+
+  next();
 };
