@@ -34,6 +34,7 @@
           v-if="signin.rememberMe ? 'selected' : 'unselected'"
           >Remember me</Checkbox
         >
+        <a @click.prevent="fPassModal = true">Forgot Password?</a>
       </div>
       <FormItem>
         <Button type="primary" @click="handleSubmit('signinForm')"
@@ -41,6 +42,35 @@
         >
       </FormItem>
     </Form>
+
+    <!-- popup modal -->
+    <Modal
+      title="Forgot password?"
+      v-model="fPassModal"
+      :styles="{ top: '20px' }"
+    >
+      <Form
+        ref="fPassFrom"
+        :rules="fPassFromRules"
+        :model="fPassFrom"
+        :label-width="80"
+        style="width: 380px; margin: 0 auto"
+      >
+        <FormItem label="E-mail" prop="email">
+          <Input
+            v-model="fPassFrom.email"
+            placeholder="Enter your e-mail"
+          ></Input>
+        </FormItem>
+      </Form>
+
+      <template #footer>
+        <Button type="text" @click="fPassModal = false">Cancel</Button>
+        <Button type="info" @click="handelFPassModal('fPassFrom')"
+          >Send<Icon type="ios-send"
+        /></Button>
+      </template>
+    </Modal>
   </div>
 </template>
 <script>
@@ -58,6 +88,12 @@ export default {
         phone: "",
         password: "",
         rememberMe: null,
+      },
+
+      fPassModal: false,
+
+      fPassFrom: {
+        email: "",
       },
 
       rules: {
@@ -84,6 +120,21 @@ export default {
             type: "string",
             min: 8,
             message: "The password length cannot be less than 8 characters",
+            trigger: "blur",
+          },
+        ],
+      },
+
+      fPassFromRules: {
+        email: [
+          {
+            required: true,
+            message: "E-mail cannot be empty!",
+            trigger: "blur",
+          },
+          {
+            type: "email",
+            message: "Incorrect email format!",
             trigger: "blur",
           },
         ],
@@ -145,6 +196,14 @@ export default {
           }
         });
     },
+
+    handelFPassModal(name) {
+      this.$refs[name].validate((valid) => {
+        if (valid) {
+          this.$Message.info("Clicked ok");
+        }
+      });
+    },
   },
 };
 </script>
@@ -156,5 +215,16 @@ export default {
 }
 .auto-login a {
   float: right;
+}
+.auto-login a {
+  float: right;
+}
+.vertical-center-modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.vertical-center-modal .ivu-modal {
+  top: 0;
 }
 </style>
