@@ -45,22 +45,32 @@ exports.signup = async (req, res) => {
 exports.signin = async (req, res) => {
   const { phone, password, rememberMe } = req.body;
 
-  // ! 1) check if email and password given
+  // ! check if email and password given
   if (!phone || !password) {
     return res
       .status(400)
       .json({ status: "fail", message: "Please provide email and password!" });
   }
 
-  // ! 2) check if user exists && password is correct
   const user = await User.findOne({ phone });
-  if (!user || !(await user.correctPassword(password, user.passwd))) {
-    return res
-      .status(401)
-      .json({ status: "fail", message: "Incorrect email or password" });
+  // ! check if remember me option is selected or not
+  if (!req.cookies.remember) {
+    // ! check if user exists && password is correct
+    if (!user || !(await user.correctPassword(password, user.passwd))) {
+      return res
+        .status(401)
+        .json({ status: "fail", message: "Incorrect email or password" });
+    }
+  } else {
+    // ! check if remember me auto set password is correct
+    if (!(await User.findOne({ passwd: password }))) {
+      return res
+        .status(401)
+        .json({ status: "fail", message: "Incorrect email or password" });
+    }
   }
 
-  // ! 3) if everything ok, send token to client
+  // ! if everything ok, send token to client
   let token = jwt.sign({ id: user._id }, "well-something", {
     expiresIn: "90d",
   });
@@ -69,6 +79,7 @@ exports.signin = async (req, res) => {
     expiresIn: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
   });
 
+  // ! this is for login remember me functionality
   if (rememberMe) {
     let randVal = (Math.random() + 1).toString(36).substring(2);
     res.cookie("remember", randVal, {
@@ -94,10 +105,12 @@ exports.CheckRemember = async (req, res, next) => {
   const isRemember = req.cookies.remember;
   if (isRemember) {
     const user = await User.findOne({ rememberMe: isRemember });
-    const plainPass = await user.correctPassword("12345678", user.passwd);
-    // console.log(plainPass);
-    if (user.rememberMe) {
+    if (user && user.rememberMe == isRemember) {
       res.status(200).json({ status: "success", data: user });
+    } else {
+      return res
+        .status(404)
+        .json({ status: "fail", message: "Invalid remember token!" });
     }
   }
 

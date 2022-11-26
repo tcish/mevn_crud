@@ -132,7 +132,6 @@ export default {
           withCredentials: true,
         })
         .then((response) => {
-          console.log(response.data.data);
           if (response && response.data.status == "success") {
             this.signin.phone = response.data.data.phone;
             this.signin.password = response.data.data.passwd;
@@ -141,6 +140,9 @@ export default {
         })
         .catch((error) => {
           console.log(error);
+          if (error.response.data.status == "fail") {
+            this.$Message.error(error.response.data.message);
+          }
         });
     },
   },
