@@ -53,9 +53,16 @@
         ref="fPassFrom"
         :rules="fPassFromRules"
         :model="fPassFrom"
-        :label-width="80"
+        :label-width="100"
         style="width: 380px; margin: 0 auto"
       >
+        <FormItem label="Phone No." prop="phone">
+          <Input
+            v-model="fPassFrom.phone"
+            placeholder="Enter your phone no"
+          ></Input>
+        </FormItem>
+
         <FormItem label="E-mail" prop="email">
           <Input
             v-model="fPassFrom.email"
@@ -93,6 +100,7 @@ export default {
       fPassModal: false,
 
       fPassFrom: {
+        phone: "",
         email: "",
       },
 
@@ -126,6 +134,18 @@ export default {
       },
 
       fPassFromRules: {
+        phone: [
+          {
+            required: true,
+            message: "No phone number is given",
+            trigger: "blur",
+          },
+          {
+            pattern: /^(?:\+?88)?01[13-9]\d{8}$/,
+            message: "Given number is no valid",
+            trigger: "blur",
+          },
+        ],
         email: [
           {
             required: true,
@@ -200,7 +220,22 @@ export default {
     handelFPassModal(name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
-          this.$Message.info("Clicked ok");
+          axios
+            .post(`http://127.0.0.1:3000/forgotPassword`, this.fPassFrom)
+            .then((response) => {
+              if (response.data.status == "success") {
+                this.$Message.info(response.data.message);
+                this.fPassModal = false;
+                this.$refs[name].resetFields();
+                this.$router.push("/home");
+              }
+            })
+            .catch((error) => {
+              console.log(error);
+              if (error.response.data.status == "fail") {
+                this.$Message.error(error.response.data.message);
+              }
+            });
         }
       });
     },

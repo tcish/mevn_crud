@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcryptjs");
+const crypto = require("crypto");
 
 const userSchema = new mongoose.Schema({
   phone: {
@@ -27,6 +28,10 @@ const userSchema = new mongoose.Schema({
   },
 
   rememberMe: String,
+
+  passResetToken: String,
+
+  passResetExpires: Date,
 });
 
 // ? this is for hashing password before inserting data after checking the validation
@@ -44,6 +49,19 @@ userSchema.methods.correctPassword = async function (
   savedPassword
 ) {
   return await bcrypt.compare(givenPassword, savedPassword);
+};
+
+// ? this is to match user given password
+userSchema.methods.createPassResetToken = async function () {
+  const resetToken = crypto.randomBytes(32).toString("hex");
+  this.passResetToken = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
+
+  this.passResetExpires = Date.now() + 10 * 60 * 1000;
+
+  return resetToken;
 };
 
 const User = mongoose.model("User", userSchema);

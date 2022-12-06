@@ -11,5 +11,15 @@ userRoute.get(
   protectController.loggedIn,
   userController.CheckRemember
 );
+userRoute.post(
+  "/forgotPassword",
+  protectController.loggedIn,
+  userController.forgotPassword
+);
+userRoute.patch(
+  "/resetPassword/:token",
+  protectController.loggedIn,
+  userController.resetPassword
+);
 
 module.exports = userRoute;
