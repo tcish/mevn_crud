@@ -51,6 +51,16 @@ const routes = [
       isAuth: false,
     },
   },
+  {
+    path: "/reset-password/:token",
+    name: "reset-password",
+    component: function () {
+      return import("../views/ResetPassword.vue");
+    },
+    meta: {
+      isAuth: false,
+    },
+  },
 ];
 
 const router = createRouter({

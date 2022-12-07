@@ -138,9 +138,11 @@ exports.forgotPassword = async (req, res, next) => {
     await user.save({ validateBeforeSave: false });
 
     // ! send it to user's email
-    const resetUrl = `${req.protocol}://${req.get(
-      "host"
-    )}/resetPassword/${resetToken}`;
+    // const resetUrl = `${req.protocol}://${req.get(
+    //   "host"
+    // )}/resetPassword/${resetToken}`;
+
+    const resetUrl = `${req.protocol}://127.0.0.1:8080/#/reset-password/${resetToken}`;
 
     const message = `Forgot your password? Submit a patch request with your new password and password confirm to: ${resetUrl}.\nIf you didn't forget your password, please ignore this email!`;
 
@@ -194,11 +196,16 @@ exports.resetPassword = async (req, res, next) => {
     }
 
     // ! update changedPasswordAt property for the user
-    user.passwd = req.body.password;
-    user.passwdCheck = req.body.passConfirm;
-    user.passResetToken = undefined;
-    user.passResetExpires = undefined;
-    await user.save();
+    if (req.body.newPass == req.body.newPassChk) {
+      user.passwd = req.body.newPass;
+      user.passResetToken = undefined;
+      user.passResetExpires = undefined;
+      await user.save();
+    } else {
+      return res
+        .status(403)
+        .json({ status: "fail", message: "New password do not match!" });
+    }
 
     // ! log the user in, send jwt
     let token = jwt.sign({ id: user._id }, "well-something", {
@@ -209,6 +216,6 @@ exports.resetPassword = async (req, res, next) => {
       expiresIn: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
     });
 
-    res.status(201).json({ status: "success", token, data: { user: user } });
+    res.status(201).json({ status: "success", message: "Password Changed successfully!" });
   } catch (err) {}
 };

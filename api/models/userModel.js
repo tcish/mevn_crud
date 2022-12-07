@@ -59,7 +59,7 @@ userSchema.methods.createPassResetToken = async function () {
     .update(resetToken)
     .digest("hex");
 
-  this.passResetExpires = Date.now() + 10 * 60 * 1000;
+  this.passResetExpires = Date.now() + 600000; // + 10 minutes from current time
 
   return resetToken;
 };

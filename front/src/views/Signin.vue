@@ -73,9 +73,14 @@
 
       <template #footer>
         <Button type="text" @click="fPassModal = false">Cancel</Button>
-        <Button type="info" @click="handelFPassModal('fPassFrom')"
-          >Send<Icon type="ios-send"
-        /></Button>
+        <Button
+          type="info"
+          :loading="loading"
+          @click="handelFPassModal('fPassFrom')"
+        >
+          <span v-if="!loading">Send<Icon type="ios-send" /></span>
+          <span v-else>Sending...</span>
+        </Button>
       </template>
     </Modal>
   </div>
@@ -98,6 +103,7 @@ export default {
       },
 
       fPassModal: false,
+      loading: false,
 
       fPassFrom: {
         phone: "",
@@ -223,9 +229,11 @@ export default {
           axios
             .post(`http://127.0.0.1:3000/forgotPassword`, this.fPassFrom)
             .then((response) => {
+              this.loading = true;
               if (response.data.status == "success") {
                 this.$Message.info(response.data.message);
                 this.fPassModal = false;
+                this.loading = false;
                 this.$refs[name].resetFields();
                 this.$router.push("/home");
               }
