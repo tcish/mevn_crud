@@ -16,9 +16,43 @@
             placeholder="Enter your address"
           ></Input>
         </FormItem>
-        <FormItem label="Skills" prop="skill">
-          <Input v-model="form.skill" placeholder="Enter your skill"></Input>
+
+        <template v-for="(item, i) in form.skill">
+          <FormItem
+            v-if="item"
+            :key="i"
+            label="Skill"
+            :prop="'skill.' + i + '.skill'"
+            :rules="{
+              required: true,
+              message: 'Skill can not be empty',
+              trigger: 'blur',
+            }"
+          >
+            <Row>
+              <Col span="18">
+                <Input
+                  type="text"
+                  v-model="item.skill"
+                  placeholder="Enter your skill"
+                ></Input>
+              </Col>
+              <Col span="4" offset="1">
+                <Button @click="handleRemove(i)">Delete</Button>
+              </Col>
+            </Row>
+          </FormItem>
+        </template>
+        <FormItem>
+          <Row>
+            <Col span="12">
+              <Button type="dashed" long @click="handleAdd" icon="md-add"
+                >Add item</Button
+              >
+            </Col>
+          </Row>
         </FormItem>
+
         <FormItem>
           <Button type="primary" @click="handleSubmit('form')">Submit</Button>
           <Button @click="handleReset('form')" style="margin-left: 8px"
@@ -40,11 +74,18 @@ export default {
 
   data() {
     return {
+      index: 1,
       form: {
         name: "",
         email: "",
         address: "",
-        skill: "",
+        skill: [
+          {
+            skill: "",
+            index: 1,
+            status: 1,
+          },
+        ],
       },
 
       ruleValidate: {
@@ -71,13 +112,6 @@ export default {
           {
             required: true,
             message: "Address cannot be empty!",
-            trigger: "blur",
-          },
-        ],
-        skill: [
-          {
-            required: true,
-            message: "Skills cannot be empty!",
             trigger: "blur",
           },
         ],
@@ -122,6 +156,19 @@ export default {
           this.$Message.error("Please check all the inputs!");
         }
       });
+    },
+
+    handleAdd() {
+      this.index++;
+      this.form.skill.push({
+        skill: "",
+        index: this.index,
+        status: 1,
+      });
+    },
+
+    handleRemove(index) {
+      this.form.skill[index].status = 0;
     },
 
     handleReset(form) {

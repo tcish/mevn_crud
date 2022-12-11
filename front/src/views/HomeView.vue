@@ -50,8 +50,14 @@ export default {
         },
         {
           title: "Skill",
-          key: "skill",
+          type: "expand",
           align: "center",
+          width: 150,
+          render: (h, { row: { skill } }) => {
+            skill.forEach((el) => {
+              return h('span' + el.skill + ', ');
+            });
+          },
         },
         {
           title: "Action",

@@ -19,10 +19,19 @@ const crudSchema = new mongoose.Schema({
     required: [true, "Please provide your address"],
   },
 
-  skill: {
-    type: String,
-    required: [true, "Please provide your skill"],
+  user: {
+    type: mongoose.Types.ObjectId,
+    ref: "User",
+    required: [true, "User object id not given!"],
   },
+
+  skill: [
+    {
+      type: mongoose.Types.ObjectId,
+      ref: "Skill",
+      required: [true, "Skill object id not given!"],
+    },
+  ],
 });
 
 const Crud = mongoose.model("Crud", crudSchema);
