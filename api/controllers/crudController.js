@@ -123,7 +123,10 @@ exports.update = async (req, res) => {
         //   crudData.skill.indexOf(element._id),
         //   1
         // );
-        await Crud.update(
+
+        await Skill.deleteOne({ _id: element._id });
+
+        await Crud.updateOne(
           { _id: req.params.id },
           { $pull: { skill: element._id } }
         );
@@ -152,6 +155,13 @@ exports.delete = async (req, res) => {
         message: "No data found with that ID",
       });
     }
+
+    // ? map return as a array
+    const skillId = data.skill.map((el) => el._id);
+
+    // ? The $in operator selects the documents where the value of a field equals -
+    // ? any value in the specified array.
+    await Skill.deleteMany({ _id: { $in: skillId } });
 
     res.status(200).json({ status: "success", message: "Delete successful" });
   } catch (err) {
