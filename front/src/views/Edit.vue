@@ -28,6 +28,7 @@
               message: 'Skill can not be empty',
               trigger: 'blur',
             }"
+            :id="'remove-' + i"
           >
             <Row>
               <Col span="18">
@@ -168,7 +169,8 @@ export default {
     },
 
     handleRemove(index) {
-      this.form.skill[index].status = 0;
+      document.getElementById("remove-" + index).style.display = "none";
+      this.form.skill[index].delete = "true";
     },
 
     handleReset(form) {

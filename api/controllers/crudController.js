@@ -72,18 +72,22 @@ exports.update = async (req, res) => {
     const hasMail = await Crud.findOne({ email: req.body.email });
     if (hasMail && hasMail._id.toString() != req.params.id) {
       return res
-      .status(401)
-      .json({ status: "fail", message: "Email already exist!" });
+        .status(401)
+        .json({ status: "fail", message: "Email already exist!" });
     }
-    
-    const crudData = await Crud.findByIdAndUpdate(req.params.id, ({
-      name: req.body.name,
-      email: req.body.email,
-      address: req.body.address,
-    }), {
-      new: true,
-      runValidators: true,
-    });
+
+    const crudData = await Crud.findByIdAndUpdate(
+      req.params.id,
+      {
+        name: req.body.name,
+        email: req.body.email,
+        address: req.body.address,
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
 
     if (!crudData) {
       return res.status(401).json({
@@ -93,8 +97,8 @@ exports.update = async (req, res) => {
     }
 
     req.body.skill.forEach(async (element) => {
-      if (!element.status) {
-        const skillData = await Skill.findByIdAndUpdate(
+      if (element.status == undefined && !element.delete) {
+        await Skill.findByIdAndUpdate(
           element._id,
           { skill: element.skill },
           {
@@ -102,7 +106,11 @@ exports.update = async (req, res) => {
             runValidators: true,
           }
         );
-      } else if (element.status != 0) {
+      } else if (
+        element.status != undefined &&
+        element.status != 0 &&
+        !element.delete
+      ) {
         const skillData = await Skill.create({
           skill: element.skill,
         });
@@ -110,6 +118,15 @@ exports.update = async (req, res) => {
         await Crud.findByIdAndUpdate(req.params.id, {
           $push: { skill: skillData._id },
         });
+      } else if (element.skill != "" && element.delete) {
+        // const data = crudData.skill.splice(
+        //   crudData.skill.indexOf(element._id),
+        //   1
+        // );
+        await Crud.update(
+          { _id: req.params.id },
+          { $pull: { skill: element._id } }
+        );
       }
     });
 
