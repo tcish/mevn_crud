@@ -226,13 +226,13 @@ export default {
     handelFPassModal(name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
+          this.loading = true;
           axios
             .post(`http://127.0.0.1:3000/forgotPassword`, this.fPassFrom)
             .then((response) => {
-              this.loading = true;
               if (response.data.status == "success") {
-                this.$Message.info(response.data.message);
                 this.fPassModal = false;
+                this.$Message.info(response.data.message);
                 this.loading = false;
                 this.$refs[name].resetFields();
                 this.$router.push("/home");
@@ -241,6 +241,7 @@ export default {
             .catch((error) => {
               console.log(error);
               if (error.response.data.status == "fail") {
+                this.loading = false;
                 this.$Message.error(error.response.data.message);
               }
             });
